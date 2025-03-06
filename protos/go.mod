@@ -1,4 +1,4 @@
-module github.com/NorthDice/authGRPC/protos
+module github.com/NorthDice/AuthGRPC/protos
 
 go 1.24.0
 
