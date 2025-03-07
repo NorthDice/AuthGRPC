@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/NorthDice/AuthGRPC/internal/app"
 	"github.com/NorthDice/AuthGRPC/internal/config"
 	"log/slog"
 	"os"
@@ -20,6 +21,10 @@ func main() {
 	log.Info("Starting authGRPC service",
 		slog.String("cfg", cfg.Env),
 	)
+
+	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+
+	application.GRPCSrv.MustRun()
 }
 
 func setupLogger(env string) *slog.Logger {
