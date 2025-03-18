@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"errors"
+	"github.com/NorthDice/AuthGRPC/internal/storage"
 	ssov1 "github.com/NorthDice/AuthGRPC/protos/gen/go/auth"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -49,6 +51,9 @@ func (s *serverAPI) Login(
 
 	token, err := s.auth.Login(ctx, req.GetEmail(), req.GetPassword(), int32(req.GetAppId()))
 	if err != nil {
+		if errors.Is(err, storage.ErrUserExists) {
+			return nil, status.Error(codes.AlreadyExists, "User already exists")
+		}
 		return nil, status.Error(codes.Internal, "Internal error")
 	}
 
@@ -67,6 +72,9 @@ func (s *serverAPI) IsAdmin(
 
 	isAdmin, err := s.auth.IsAdmin(ctx, req.GetUserId())
 	if err != nil {
+		if errors.Is(err, storage.ErrUserNotFound) {
+			return nil, status.Error(codes.NotFound, "User not found")
+		}
 		return nil, status.Error(codes.Internal, "Internal error")
 	}
 
@@ -86,6 +94,9 @@ func (s *serverAPI) Register(
 
 	userID, err := s.auth.RegisterNewUser(ctx, request.GetEmail(), request.GetPassword())
 	if err != nil {
+		if errors.Is(err, storage.ErrUserExists) {
+			return nil, status.Error(codes.AlreadyExists, "User already exists")
+		}
 		return nil, status.Error(codes.Internal, "Internal error")
 	}
 
