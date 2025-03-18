@@ -2,6 +2,8 @@ package app
 
 import (
 	grpcapp "github.com/NorthDice/AuthGRPC/internal/app/grpc"
+	"github.com/NorthDice/AuthGRPC/internal/services/auth"
+	"github.com/NorthDice/AuthGRPC/storage/sqlite"
 	"log/slog"
 	"time"
 )
@@ -17,7 +19,14 @@ func New(
 	tokenTLL time.Duration,
 ) *App {
 
-	grpcApp := grpcapp.New(log, grpcPort)
+	storage, err := sqlite.New(storagePath)
+	if err != nil {
+		log.Error("Failed to initialize storage")
+		panic(err)
+	}
+	authService := auth.New(log, storage, storage, storage, tokenTLL)
+
+	grpcApp := grpcapp.New(log, authService, grpcPort)
 
 	return &App{
 		GRPCSrv: grpcApp,

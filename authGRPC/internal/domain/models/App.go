@@ -2,7 +2,7 @@ package models
 
 type App struct {
 	ID       int32
-	Email    string
+	Name     string
 	Password string
 	Secret   string
 }

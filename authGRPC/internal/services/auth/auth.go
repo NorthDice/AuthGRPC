@@ -132,6 +132,8 @@ func (auth *Auth) RegisterNewUser(
 		return 0, fmt.Errorf("%s: %w", op, err)
 	}
 
+	log.Info("Password generated")
+
 	id, err := auth.usrSaver.SaveUser(ctx, email, passwordHash)
 	if err != nil {
 		if errors.Is(err, storage.ErrUserExists) {
@@ -142,6 +144,7 @@ func (auth *Auth) RegisterNewUser(
 
 	log.Info("User registered")
 
+	log.Info("id", id)
 	return id, nil
 }
 
