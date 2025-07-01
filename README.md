@@ -2,6 +2,7 @@
 AuthGRPC is a project that implements authorization and authentication within a microservices architecture using gRPC. The project employs logging through the slogger library and parses configuration files with the help of cleanenv. SQLite is used as the database for data storage.
 ## Description
 This project consists of several key layers that are crucial for its functionality:
+
 ### Transport Layer: 
 The transport layer is responsible for implementing gRPC to enable communication between different services in the microservices architecture. gRPC is used here to facilitate high-performance, language-neutral communication over HTTP/2, providing efficient and fast communication between the services.
 ### Service Layer: 
